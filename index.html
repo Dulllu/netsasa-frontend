@@ -1,1325 +1,361 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NETSASA - Premium Wi-Fi Connectivity</title>
-    <meta name="description" content="Fast, reliable, and affordable Wi-Fi packages in Kakamega. Pay with M-Pesa and connect instantly.">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Space Grotesk', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: '#6366F1',
-                        secondary: '#8B5CF6',
-                        accent: '#10B981',
-                        dark: '#0F172A',
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <style>
-        :root {
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 50%, #312E81 100%);
-            background-attachment: fixed;
-            min-height: 100vh;
-        }
-        
-        .glass {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-        }
-        
-        .glass-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .gradient-text {
-            background: linear-gradient(135deg, #6366F1, #EC4899, #8B5CF6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .package-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .package-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.3);
-        }
-        
-        .popular-badge {
-            background: linear-gradient(135deg, #EC4899, #8B5CF6);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #6366F1, #8B5CF6);
-            transition: all 0.3s;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
-        }
-        
-        .loading-spinner {
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top-color: #6366F1;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .pulse-ring {
-            position: absolute;
-            border-radius: 50%;
-            animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-        }
-        
-        @keyframes pulse-ring {
-            0% { transform: scale(0.8); opacity: 0.8; }
-            100% { transform: scale(1.3); opacity: 0; }
-        }
-        
-        .success-checkmark {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            display: block;
-            stroke-width: 2;
-            stroke: #10B981;
-            stroke-miterlimit: 10;
-            box-shadow: inset 0px 0px 0px #10B981;
-            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
-        }
-        
-        .checkmark__circle {
-            stroke-dasharray: 166;
-            stroke-dashoffset: 166;
-            stroke-width: 2;
-            stroke-miterlimit: 10;
-            stroke: #10B981;
-            fill: none;
-            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
-        }
-        
-        .checkmark__check {
-            transform-origin: 50% 50%;
-            stroke-dasharray: 48;
-            stroke-dashoffset: 48;
-            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
-        }
-        
-        @keyframes stroke {
-            100% { stroke-dashoffset: 0; }
-        }
-        
-        @keyframes scale {
-            0%, 100% { transform: none; }
-            50% { transform: scale3d(1.1, 1.1, 1); }
-        }
-        
-        @keyframes fill {
-            100% { box-shadow: inset 0px 0px 0px 30px rgba(16, 185, 129, 0.1); }
-        }
-        
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: #6366F1;
-            position: absolute;
-            animation: confetti-fall 3s ease-out forwards;
-        }
-        
-        @keyframes confetti-fall {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
-        
-        .sse-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .sse-status::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #10B981;
-            animation: pulse 2s infinite;
-        }
-        
-        .sse-status.waiting::before {
-            background: #F59E0B;
-        }
-        
-        .sse-status.error::before {
-            background: #EF4444;
-            animation: none;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        .transaction-item {
-            animation: slideIn 0.3s ease-out;
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        
-        .floating-shape {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.3;
-            animation: float 8s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-        
-        .toast {
-            transform: translateX(100%);
-            transition: transform 0.3s ease-out;
-        }
-        
-        .toast.show {
-            transform: translateX(0);
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NETSASA — Pocket-friendly Wi-Fi for Everyone</title>
+
+  <meta name="description" content="NETSASA — Pay instantly via M-Pesa and get connected to Wi-Fi in Kakamega. Fast, reliable and pocket-friendly internet access.">
+  <link rel="icon" href="/favicon.png" type="image/png">
+  <link rel="manifest" href="/manifest.json">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <style>
+    :root{
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-strong: rgba(255,255,255,0.08);
+      --accent: #6366F1;
+      --green: #10B981;
+    }
+
+    .glass { background: var(--glass-bg); backdrop-filter: blur(8px); }
+    .glass-strong { background: var(--glass-strong); backdrop-filter: blur(10px); }
+    .fade-in { animation: fadeIn .18s ease both; }
+    .scale-in { animation: scaleIn .18s cubic-bezier(.2,.9,.3,1) both; }
+    @keyframes fadeIn { from {opacity:0} to {opacity:1} }
+    @keyframes scaleIn { from {transform: translateY(8px) scale(.98); opacity:0} to {transform: translateY(0) scale(1); opacity:1} }
+
+    .lds-ring { display:inline-block; position:relative; width:36px; height:36px; }
+    .lds-ring div { box-sizing: border-box; display:block; position:absolute;
+      width:28px; height:28px; margin:4px; border:3px solid currentColor;
+      border-radius:50%; animation:lds-ring 1.2s cubic-bezier(.5,0,.5,1) infinite;
+      border-color: currentColor transparent transparent transparent; }
+    .lds-ring div:nth-child(1){ animation-delay:-.45s; }
+    .lds-ring div:nth-child(2){ animation-delay:-.3s; }
+    .lds-ring div:nth-child(3){ animation-delay:-.15s; }
+    @keyframes lds-ring { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
+
+    .success-msg { display: flex; align-items: center; gap: 10px; font-weight: bold; color: var(--green); margin-top: 1rem; }
+
+    /* WhatsApp button */
+    #whatsappBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #25D366;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 28px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 1100;
+      transition: transform 0.2s;
+    }
+    #whatsappBtn:hover { transform: scale(1.1); }
+
+    /* Terms modal */
+    #termsModal { display: none; position: fixed; inset:0; background: rgba(0,0,0,0.6); z-index: 1050; align-items: center; justify-content: center; }
+    #termsCard { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); padding: 2rem; border-radius: 1.5rem; max-width: 600px; color: #E0E7FF; max-height: 80vh; overflow-y: auto; }
+    #termsCard h2 { font-size: 1.25rem; margin-top: 1rem; font-weight: 600; }
+    #termsCard p { margin-top: 0.5rem; font-size: 0.95rem; line-height: 1.4rem; }
+  </style>
 </head>
-<body class="text-white antialiased overflow-x-hidden">
 
-    <!-- Background Elements -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="floating-shape w-96 h-96 bg-indigo-600 top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
-        <div class="floating-shape w-80 h-80 bg-purple-600 top-1/2 right-0 translate-x-1/2" style="animation-delay: 2s;"></div>
-        <div class="floating-shape w-64 h-64 bg-pink-600 bottom-0 left-1/3" style="animation-delay: 4s;"></div>
+<body class="min-h-screen bg-gradient-to-br from-sky-900 via-indigo-900 to-violet-800 text-sky-50 antialiased selection:bg-indigo-700 selection:text-white">
+
+<header class="max-w-6xl mx-auto p-6 flex items-center justify-between gap-4">
+  <div>
+    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">NETSASA</h1>
+    <p class="text-sky-200 mt-1 text-sm">Pocket-friendly Wi-Fi for Everyone — Pay & connect instantly.</p>
+  </div>
+  <div class="text-right hidden sm:block">
+    <p class="text-sm text-sky-200">Location: <span class="font-medium">KAKAMEGA</span></p>
+    <p class="text-xs text-sky-300">No signup required — just pay and get connected.</p>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto p-6">
+  <section id="packagesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></section>
+  <div class="mt-6 text-sky-300 text-xs max-w-3xl">
+    <p>By purchasing you agree to <span id="showTerms" class="underline cursor-pointer text-sky-100">Terms & Fair Use Policy</span>. Abuse may result in disconnection.</p>
+  </div>
+</main>
+
+<!-- Payment Modal -->
+<div id="payModal" class="fixed inset-0 hidden items-center justify-center bg-black/60 z-50 fade-in" aria-hidden="true">
+  <div id="payCard" class="glass-strong w-11/12 max-w-md p-6 rounded-2xl scale-in" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="flex items-start justify-between">
+      <div>
+        <h3 id="modalTitle" class="text-xl font-semibold leading-tight">Buy Package</h3>
+        <p id="modalPrice" class="text-sky-200 mt-1 text-sm"></p>
+      </div>
+      <button id="closeModal" aria-label="Close" class="text-sky-200 hover:text-white rounded p-1">✕</button>
     </div>
-
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-                        <i data-lucide="wifi" class="w-7 h-7 text-white"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold font-display tracking-tight">NETSASA</h1>
-                        <p class="text-xs text-gray-400">Premium Connectivity</p>
-                    </div>
-                </div>
-                
-                <div class="hidden md:flex items-center gap-8">
-                    <a href="#packages" class="text-sm font-medium text-gray-300 hover:text-white transition">Packages</a>
-                    <a href="#transactions" class="text-sm font-medium text-gray-300 hover:text-white transition">My History</a>
-                    <button onclick="showHelp()" class="text-sm font-medium text-gray-300 hover:text-white transition">Help</button>
-                </div>
-
-                <div class="flex items-center gap-4">
-                    <div class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/30">
-                        <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                        <span class="text-sm text-green-400 font-medium">Online</span>
-                    </div>
-                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 hover:bg-white/10 rounded-lg transition">
-                        <i data-lucide="menu" class="w-6 h-6"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Mobile Menu -->
-        <div id="mobileMenu" class="hidden md:hidden glass border-t border-white/10">
-            <div class="px-4 py-4 space-y-3">
-                <a href="#packages" class="block py-2 text-gray-300 hover:text-white">Packages</a>
-                <a href="#transactions" class="block py-2 text-gray-300 hover:text-white">My History</a>
-                <button onclick="showHelp()" class="block py-2 text-gray-300 hover:text-white w-full text-left">Help</button>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center max-w-3xl mx-auto">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-sm font-medium mb-6">
-                    <i data-lucide="zap" class="w-4 h-4"></i>
-                    <span>Lightning Fast Wi-Fi in Kakamega</span>
-                </div>
-                
-                <h2 class="text-5xl sm:text-6xl lg:text-7xl font-bold font-display leading-tight mb-6">
-                    Connect in <span class="gradient-text">Seconds</span>
-                </h2>
-                
-                <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                    Choose from 10 premium packages starting at just KES 10. Pay with M-Pesa, get instant access, and enjoy uninterrupted browsing.
-                </p>
-                
-                <div class="flex flex-wrap justify-center gap-4 mb-12">
-                    <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5">
-                        <i data-lucide="check-circle" class="w-5 h-5 text-green-400"></i>
-                        <span class="text-sm">No Registration</span>
-                    </div>
-                    <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5">
-                        <i data-lucide="check-circle" class="w-5 h-5 text-green-400"></i>
-                        <span class="text-sm">Instant Activation</span>
-                    </div>
-                    <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5">
-                        <i data-lucide="check-circle" class="w-5 h-5 text-green-400"></i>
-                        <span class="text-sm">24/7 Support</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Packages Section -->
-    <section id="packages" class="py-20 px-4 sm:px-6 lg:px-8 relative">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h3 class="text-4xl font-bold font-display mb-4">Choose Your Package</h3>
-                <p class="text-gray-400 max-w-2xl mx-auto">All packages include secure connection, multi-device support, and instant M-Pesa payment.</p>
-            </div>
-
-            <!-- Package Filters -->
-            <div class="flex flex-wrap justify-center gap-3 mb-12">
-                <button onclick="filterPackages('all')" class="filter-btn active px-6 py-2 rounded-full border border-white/20 hover:bg-white/10 transition text-sm font-medium" data-filter="all">All Packages</button>
-                <button onclick="filterPackages('hourly')" class="filter-btn px-6 py-2 rounded-full border border-white/20 hover:bg-white/10 transition text-sm font-medium" data-filter="hourly">Hourly</button>
-                <button onclick="filterPackages('daily')" class="filter-btn px-6 py-2 rounded-full border border-white/20 hover:bg-white/10 transition text-sm font-medium" data-filter="daily">Daily</button>
-                <button onclick="filterPackages('weekly')" class="filter-btn px-6 py-2 rounded-full border border-white/20 hover:bg-white/10 transition text-sm font-medium" data-filter="weekly">Weekly</button>
-                <button onclick="filterPackages('special')" class="filter-btn px-6 py-2 rounded-full border border-white/20 hover:bg-white/10 transition text-sm font-medium" data-filter="special">Special</button>
-            </div>
-
-            <!-- Packages Grid -->
-            <div id="packagesGrid" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <!-- Packages will be rendered here -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Transaction History Section -->
-    <section id="transactions" class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-transparent to-indigo-950/30">
-        <div class="max-w-4xl mx-auto">
-            <div class="glass-card rounded-3xl p-8">
-                <div class="flex items-center justify-between mb-8">
-                    <div>
-                        <h3 class="text-2xl font-bold font-display mb-2">Transaction History</h3>
-                        <p class="text-gray-400 text-sm">View your recent purchases and their status</p>
-                    </div>
-                    <button onclick="refreshTransactions()" class="p-3 rounded-xl bg-white/5 hover:bg-white/10 transition">
-                        <i data-lucide="refresh-cw" class="w-5 h-5"></i>
-                    </button>
-                </div>
-
-                <!-- Phone Lookup -->
-                <div class="flex gap-3 mb-6">
-                    <div class="relative flex-1">
-                        <i data-lucide="smartphone" class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
-                        <input type="tel" id="historyPhone" placeholder="Enter your phone number (07XXXXXXXX)" 
-                            class="w-full pl-12 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-indigo-500 transition text-white placeholder-gray-500">
-                    </div>
-                    <button onclick="loadTransactions()" class="px-6 py-3 bg-indigo-600 rounded-xl font-semibold hover:bg-indigo-700 transition">
-                        View
-                    </button>
-                </div>
-
-                <!-- Transactions List -->
-                <div id="transactionsList" class="space-y-3 max-h-96 overflow-y-auto">
-                    <div class="text-center py-12 text-gray-500">
-                        <i data-lucide="receipt" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
-                        <p>Enter your phone number to view history</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="border-t border-white/10 py-12 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-4 gap-8 mb-8">
-                <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                            <i data-lucide="wifi" class="w-6 h-6 text-white"></i>
-                        </div>
-                        <span class="text-xl font-bold font-display">NETSASA</span>
-                    </div>
-                    <p class="text-gray-400 text-sm">Premium Wi-Fi connectivity for everyone in Kakamega. Fast, affordable, and reliable.</p>
-                </div>
-                
-                <div>
-                    <h4 class="font-semibold mb-4">Quick Links</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#packages" class="hover:text-white transition">Buy Package</a></li>
-                        <li><a href="#transactions" class="hover:text-white transition">My History</a></li>
-                        <li><a href="#" onclick="showHelp()" class="hover:text-white transition">Help Center</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="font-semibold mb-4">Support</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="https://wa.me/254718912019" target="_blank" class="hover:text-white transition">WhatsApp</a></li>
-                        <li><span class="hover:text-white transition">Call: 0718 912 019</span></li>
-                        <li><span class="hover:text-white transition">Email: support@netsasa.com</span></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="font-semibold mb-4">Legal</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" onclick="showTerms()" class="hover:text-white transition">Terms of Service</a></li>
-                        <li><a href="#" onclick="showPrivacy()" class="hover:text-white transition">Privacy Policy</a></li>
-                        <li><a href="#" onclick="showRefund()" class="hover:text-white transition">Refund Policy</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-gray-500 text-sm">© 2024 NETSASA. All rights reserved.</p>
-                <div class="flex items-center gap-4">
-                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition">
-                        <i data-lucide="facebook" class="w-5 h-5"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition">
-                        <i data-lucide="twitter" class="w-5 h-5"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition">
-                        <i data-lucide="instagram" class="w-5 h-5"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Payment Modal -->
-    <div id="paymentModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="glass-card rounded-3xl w-full max-w-md p-6 relative transform transition-all scale-95 opacity-0" id="paymentModalContent">
-            <button onclick="closePaymentModal()" class="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-lg transition">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-            
-            <div id="paymentStep1">
-                <div class="text-center mb-6">
-                    <div class="w-16 h-16 rounded-full bg-indigo-500/20 flex items-center justify-center mx-auto mb-4">
-                        <i data-lucide="credit-card" class="w-8 h-8 text-indigo-400"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-2">Complete Purchase</h3>
-                    <p class="text-gray-400" id="selectedPackageName">Package Name</p>
-                    <p class="text-3xl font-bold text-indigo-400 mt-2" id="selectedPackagePrice">KES 0</p>
-                </div>
-                
-                <div class="space-y-4 mb-6">
-                    <div>
-                        <label class="block text-sm text-gray-400 mb-2">M-Pesa Phone Number</label>
-                        <div class="relative">
-                            <i data-lucide="smartphone" class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
-                            <input type="tel" id="mpesaPhone" placeholder="07XXXXXXXX" 
-                                class="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:border-indigo-500 transition text-white text-lg placeholder-gray-500"
-                                maxlength="10">
-                        </div>
-                        <p class="text-xs text-gray-500 mt-2">Enter the M-Pesa registered number to receive STK push</p>
-                    </div>
-                    
-                    <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5">
-                        <input type="checkbox" id="savePhone" class="w-5 h-5 rounded border-gray-600 text-indigo-600 focus:ring-indigo-500 bg-transparent">
-                        <label for="savePhone" class="text-sm text-gray-300">Save number for future purchases</label>
-                    </div>
-                </div>
-                
-                <button onclick="initiatePayment()" id="payButton" class="w-full py-4 btn-primary rounded-xl font-semibold text-lg flex items-center justify-center gap-2">
-                    <span>Pay with M-Pesa</span>
-                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
-                </button>
-            </div>
-            
-            <div id="paymentStep2" class="hidden">
-                <div class="text-center py-8">
-                    <div class="relative w-24 h-24 mx-auto mb-6">
-                        <div class="absolute inset-0 rounded-full border-4 border-indigo-500/30"></div>
-                        <div class="loading-spinner absolute inset-0"></div>
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <i data-lucide="smartphone" class="w-10 h-10 text-indigo-400"></i>
-                        </div>
-                    </div>
-                    
-                    <h3 class="text-xl font-bold mb-2">Processing Payment</h3>
-                    <p class="text-gray-400 mb-4">STK push sent to your phone</p>
-                    
-                    <div class="sse-status waiting mb-4 justify-center">
-                        <span id="sseStatusText">Waiting for confirmation...</span>
-                    </div>
-                    
-                    <div class="bg-white/5 rounded-lg p-4 mb-4">
-                        <p class="text-sm text-gray-400 mb-1">Checkout Request ID</p>
-                        <p class="font-mono text-sm" id="checkoutRequestId">-</p>
-                    </div>
-                    
-                    <p class="text-xs text-gray-500">Please enter your M-Pesa PIN to complete the transaction. Do not close this window.</p>
-                </div>
-            </div>
-            
-            <div id="paymentStep3" class="hidden">
-                <div class="text-center py-8">
-                    <div class="success-checkmark mx-auto mb-6">
-                        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                            <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
-                            <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-                        </svg>
-                    </div>
-                    
-                    <h3 class="text-2xl font-bold mb-2 text-green-400">Payment Successful!</h3>
-                    <p class="text-gray-400 mb-6">Your Wi-Fi package is now active</p>
-                    
-                    <div class="bg-green-500/10 border border-green-500/30 rounded-lg p-4 mb-6">
-                        <div class="flex items-center gap-3 mb-2">
-                            <i data-lucide="wifi" class="w-5 h-5 text-green-400"></i>
-                            <span class="font-semibold">Connection Details</span>
-                        </div>
-                        <p class="text-sm text-gray-300">Network: <span class="text-white font-mono">NETSASA-Pro</span></p>
-                        <p class="text-sm text-gray-300">Password: <span class="text-white font-mono">Auto-connected</span></p>
-                    </div>
-                    
-                    <button onclick="closePaymentModal(); window.location.reload();" class="w-full py-4 bg-green-600 hover:bg-green-700 rounded-xl font-semibold transition">
-                        Done
-                    </button>
-                </div>
-            </div>
-            
-            <div id="paymentStep4" class="hidden">
-                <div class="text-center py-8">
-                    <div class="w-20 h-20 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-6">
-                        <i data-lucide="x-circle" class="w-10 h-10 text-red-400"></i>
-                    </div>
-                    
-                    <h3 class="text-xl font-bold mb-2 text-red-400">Payment Failed</h3>
-                    <p class="text-gray-400 mb-6" id="paymentErrorMessage">Something went wrong. Please try again.</p>
-                    
-                    <div class="flex gap-3">
-                        <button onclick="resetPaymentModal()" class="flex-1 py-3 bg-white/10 hover:bg-white/20 rounded-xl font-semibold transition">
-                            Try Again
-                        </button>
-                        <button onclick="closePaymentModal()" class="flex-1 py-3 bg-red-600 hover:bg-red-700 rounded-xl font-semibold transition">
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <label class="block text-sm text-sky-200 mt-4">Safaricom Number</label>
+    <input id="phone" inputmode="tel" autocomplete="tel" maxlength="10" class="w-full mt-2 rounded-lg px-4 py-3 bg-transparent border border-white/10 text-sky-50 placeholder:text-sky-400 focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="e.g. 0718912019">
+    <div id="loaderRow" class="mt-4 hidden items-center gap-3">
+      <div class="lds-ring text-green-400"><div></div><div></div><div></div><div></div></div>
+      <p id="loaderText" class="text-sm text-sky-200">Processing payment...</p>
     </div>
-
-    <!-- Help Modal -->
-    <div id="helpModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="glass-card rounded-3xl w-full max-w-lg p-6 relative max-h-[90vh] overflow-y-auto">
-            <button onclick="closeHelpModal()" class="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-lg transition">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-            
-            <h3 class="text-2xl font-bold mb-6">How to Connect</h3>
-            
-            <div class="space-y-6">
-                <div class="flex gap-4">
-                    <div class="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center flex-shrink-0 font-bold text-indigo-400">1</div>
-                    <div>
-                        <h4 class="font-semibold mb-1">Choose a Package</h4>
-                        <p class="text-sm text-gray-400">Select from our 10 available packages based on your needs and budget.</p>
-                    </div>
-                </div>
-                
-                <div class="flex gap-4">
-                    <div class="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center flex-shrink-0 font-bold text-indigo-400">2</div>
-                    <div>
-                        <h4 class="font-semibold mb-1">Enter M-Pesa Number</h4>
-                        <p class="text-sm text-gray-400">Provide your M-Pesa registered phone number to receive the STK push.</p>
-                    </div>
-                </div>
-                
-                <div class="flex gap-4">
-                    <div class="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center flex-shrink-0 font-bold text-indigo-400">3</div>
-                    <div>
-                        <h4 class="font-semibold mb-1">Confirm Payment</h4>
-                        <p class="text-sm text-gray-400">Enter your M-Pesa PIN when prompted on your phone to complete the transaction.</p>
-                    </div>
-                </div>
-                
-                <div class="flex gap-4">
-                    <div class="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center flex-shrink-0 font-bold text-indigo-400">4</div>
-                    <div>
-                        <h4 class="font-semibold mb-1">Start Browsing</h4>
-                        <p class="text-sm text-gray-400">Once payment is confirmed, you'll be automatically connected to NETSASA-Pro network.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mt-8 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-xl">
-                <div class="flex items-start gap-3">
-                    <i data-lucide="alert-circle" class="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5"></i>
-                    <div>
-                        <h4 class="font-semibold text-yellow-400 mb-1">Need Help?</h4>
-                        <p class="text-sm text-gray-300">Contact our support team via WhatsApp at <a href="https://wa.me/254718912019" target="_blank" class="text-indigo-400 hover:underline">0718 912 019</a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <p id="payMsg" class="mt-4 text-sm text-sky-200"></p>
+    <div class="mt-6 flex justify-end gap-3">
+      <button id="cancelBtn" class="px-4 py-3 rounded-lg border border-white/10 text-sm">Cancel</button>
+      <button id="payBtn" class="px-5 py-3 rounded-lg bg-gradient-to-r from-indigo-600 to-indigo-500 text-white text-sm shadow-lg hover:brightness-105">Pay & Connect</button>
     </div>
+  </div>
+</div>
 
-    <!-- Terms/Privacy Modal -->
-    <div id="legalModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="glass-card rounded-3xl w-full max-w-2xl p-6 relative max-h-[90vh] overflow-y-auto">
-            <button onclick="closeLegalModal()" class="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-lg transition">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-            
-            <h3 class="text-2xl font-bold mb-4" id="legalModalTitle">Terms of Service</h3>
-            <div class="prose prose-invert max-w-none text-sm text-gray-300" id="legalModalContent">
-                <!-- Content loaded dynamically -->
-            </div>
-        </div>
+<!-- Terms Modal -->
+<div id="termsModal" class="fade-in hidden flex items-center justify-center">
+  <div id="termsCard" class="scale-in">
+    <h1 class="text-2xl font-bold">Terms & Fair Use Policy</h1>
+    <h2>General Terms</h2>
+    <p>By using NETSASA Wi-Fi, you agree to pay for the purchased packages as indicated. Misuse or fraudulent activity will result in immediate disconnection.</p>
+
+    <h2>Fair Use Policy</h2>
+    <p>NETSASA Wi-Fi is meant for personal browsing and social use. Heavy downloads, torrenting, streaming beyond package limits, or network abuse may lead to temporary or permanent suspension.</p>
+
+    <h2>Support & Contact</h2>
+    <p>For help, chat with us on WhatsApp: <a href="https://wa.me/254718912019" target="_blank" class="underline">0718912019</a></p>
+  </div>
+</div>
+
+<!-- Confetti Canvas -->
+<canvas id="confettiCanvas" class="fixed inset-0 pointer-events-none z-50 hidden"></canvas>
+
+<!-- WhatsApp Help Button -->
+<a href="https://wa.me/254718912019" target="_blank" id="whatsappBtn" aria-label="Chat with us on WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<footer class="max-w-6xl mx-auto p-6 text-center text-sky-200 text-sm">
+  <p>© NETSASA • Instant Access • M-Pesa Integrated</p>
+</footer>
+
+<script>
+const PAY_API = 'https://netsasa-backend-1.onrender.com/api/pay';
+const packages = [
+  { id: 'p1', name: 'Mwangaza 20', price: 5, duration: '20 minutes', details: 'Quick browse & messages' },
+  { id: 'p2', name: 'Sawa 50', price: 10, duration: '50 minutes', details: 'Light browsing & social' },
+  { id: 'p3', name: 'Leo 1hr', price: 20, duration: '1 hour', details: 'Streaming lite & browsing' },
+  { id: 'p4', name: 'Kipindi 3hr', price: 50, duration: '3 hours', details: 'Study session' },
+  { id: 'p5', name: 'Siku 1 Day', price: 60, duration: '24 hours', details: 'All-day access' },
+  { id: 'p6', name: 'Usiku', price: 40, duration: 'Night pack (21:00-06:00)', details: 'Cheap night access' },
+  { id: 'p7', name: 'Social 1hr', price: 15, duration: '1 hour', details: 'Access to social apps only' },
+  { id: 'p8', name: 'DataLite 800MB', price: 30, duration: '800 MB', details: 'Small data bundle' },
+  { id: 'p9', name: 'Weekend 48hr', price: 150, duration: '48 hours', details: 'Weekend surf' },
+  { id: 'p10', name: 'Wiki 7 Day', price: 400, duration: '7 days', details: 'Weekly plan for heavy users' }
+];
+
+const grid = document.getElementById('packagesGrid');
+const payModal = document.getElementById('payModal');
+const payBtn = document.getElementById('payBtn');
+const cancelBtn = document.getElementById('cancelBtn');
+const closeModal = document.getElementById('closeModal');
+const loaderRow = document.getElementById('loaderRow');
+const loaderText = document.getElementById('loaderText');
+const payMsg = document.getElementById('payMsg');
+let activePackage = null;
+
+// Render package cards
+packages.forEach(p => {
+  const card = document.createElement('article');
+  card.className = 'rounded-2xl p-5 glass shadow hover:scale-[1.01] transition transform';
+  card.innerHTML = `
+    <div class="flex items-start justify-between gap-3">
+      <div>
+        <h3 class="text-lg sm:text-xl font-semibold">${p.name}</h3>
+        <p class="text-sm text-sky-200 mt-1">${p.details}</p>
+      </div>
+      <div class="text-right">
+        <div class="text-2xl font-bold">KES ${p.price}</div>
+        <div class="text-xs text-sky-300">${p.duration}</div>
+      </div>
     </div>
+    <div class="mt-4">
+      <button onclick="openPay('${p.id}')" class="w-full px-4 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium">Pay & Connect</button>
+    </div>
+  `;
+  grid.appendChild(card);
+});
 
-    <!-- Toast Notifications -->
-    <div id="toastContainer" class="fixed top-24 right-4 z-50 space-y-3"></div>
+// Payment modal logic
+function openPay(id){
+  activePackage = packages.find(x=>x.id===id);
+  document.getElementById('modalTitle').textContent = `Buy ${activePackage.name}`;
+  document.getElementById('modalPrice').textContent = `KES ${activePackage.price} • ${activePackage.duration}`;
+  document.getElementById('phone').value = '';
+  payMsg.textContent = '';
+  loaderRow.classList.add('hidden');
+  payModal.classList.remove('hidden');
+  payModal.setAttribute('aria-hidden','false');
+  document.getElementById('phone').focus();
+}
 
-    <!-- Confetti Container -->
-    <div id="confettiContainer" class="fixed inset-0 pointer-events-none z-40 overflow-hidden"></div>
+function closePay(){
+  payModal.classList.add('hidden');
+  payModal.setAttribute('aria-hidden','true');
+  payMsg.textContent = '';
+  loaderRow.classList.add('hidden');
+}
 
-    <script>
-        // Configuration
-        const API_BASE_URL = window.location.hostname === 'localhost' 
-            ? 'http://localhost:8000' 
-            : 'https://netsasa.onrender.com';
-        
-        // 10 Wi-Fi Packages (All >= KES 10)
-        const packages = [
-            {
-                id: 'p1',
-                name: 'Sawa 50',
-                description: 'Perfect for quick browsing and social media',
-                price: 10,
-                duration: '50 minutes',
-                durationMinutes: 50,
-                data: '300 MB',
-                speed: '10 Mbps',
-                devices: 2,
-                category: 'hourly',
-                popular: true,
-                features: ['Social Media', 'Light Browsing', 'WhatsApp Calls']
-            },
-            {
-                id: 'p2',
-                name: 'Leo 1 Hour',
-                description: 'Extended session for streaming and work',
-                price: 20,
-                duration: '1 hour',
-                durationMinutes: 60,
-                data: '1 GB',
-                speed: '15 Mbps',
-                devices: 2,
-                category: 'hourly',
-                popular: false,
-                features: ['HD Streaming', 'Video Calls', 'Email']
-            },
-            {
-                id: 'p3',
-                name: 'Kipindi 3 Hours',
-                description: 'Ideal for study sessions and meetings',
-                price: 50,
-                duration: '3 hours',
-                durationMinutes: 180,
-                data: '3 GB',
-                speed: '20 Mbps',
-                devices: 3,
-                category: 'hourly',
-                popular: false,
-                features: ['Online Classes', 'Cloud Storage', 'Gaming']
-            },
-            {
-                id: 'p4',
-                name: 'Usiku Night',
-                description: 'Unlimited night browsing (9PM - 6AM)',
-                price: 40,
-                duration: '9 hours',
-                durationMinutes: 540,
-                data: 'Unlimited',
-                speed: '10 Mbps',
-                devices: 2,
-                category: 'special',
-                popular: true,
-                features: ['Unlimited Data', 'Night Downloads', 'HD Streaming']
-            },
-            {
-                id: 'p5',
-                name: 'Siku 1 Day',
-                description: 'Full day connectivity for work or leisure',
-                price: 60,
-                duration: '24 hours',
-                durationMinutes: 1440,
-                data: '2 GB',
-                speed: '15 Mbps',
-                devices: 3,
-                category: 'daily',
-                popular: true,
-                features: ['All-Day Access', 'Work From Home', 'Multiple Devices']
-            },
-            {
-                id: 'p6',
-                name: 'Siku Plus',
-                description: 'Heavy usage package for power users',
-                price: 100,
-                duration: '24 hours',
-                durationMinutes: 1440,
-                data: '5 GB',
-                speed: '20 Mbps',
-                devices: 4,
-                category: 'daily',
-                popular: false,
-                features: ['4K Streaming', 'Large Downloads', 'Gaming']
-            },
-            {
-                id: 'p7',
-                name: 'Weekend Special',
-                description: '48 hours of non-stop connectivity',
-                price: 150,
-                duration: '48 hours',
-                durationMinutes: 2880,
-                data: '5 GB',
-                speed: '20 Mbps',
-                devices: 4,
-                category: 'special',
-                popular: true,
-                features: ['Weekend Binge', 'Movie Marathon', 'Family Sharing']
-            },
-            {
-                id: 'p8',
-                name: 'Wiki 3 Days',
-                description: 'Mid-week package for consistent access',
-                price: 200,
-                duration: '3 days',
-                durationMinutes: 4320,
-                data: '5 GB',
-                speed: '20 Mbps',
-                devices: 4,
-                category: 'weekly',
-                popular: false,
-                features: ['Work Week', 'Reliable Connection', 'Auto-Renewal']
-            },
-            {
-                id: 'p9',
-                name: 'Wiki 7 Days',
-                description: 'Full week coverage with generous data',
-                price: 400,
-                duration: '7 days',
-                durationMinutes: 10080,
-                data: '15 GB',
-                speed: '25 Mbps',
-                devices: 5,
-                category: 'weekly',
-                popular: true,
-                features: ['Best Value', 'Priority Support', 'High Speed']
-            },
-            {
-                id: 'p10',
-                name: 'Mwezi Lite',
-                description: 'Monthly plan for heavy users',
-                price: 1000,
-                duration: '30 days',
-                durationMinutes: 43200,
-                data: '30 GB',
-                speed: '30 Mbps',
-                devices: 6,
-                category: 'monthly',
-                popular: false,
-                features: ['Monthly Billing', 'Business Grade', 'Dedicated IP']
-            }
-        ];
+payModal.addEventListener('click', e=>{if(e.target===payModal) closePay();});
+closeModal.addEventListener('click', closePay);
+cancelBtn.addEventListener('click', closePay);
 
-        let selectedPackage = null;
-        let currentFilter = 'all';
-        let eventSource = null;
+function normalizePhone(v){
+  v = v.replace(/\s|\-|\(|\)/g,'');
+  if(v.startsWith('+')) v=v.slice(1);
+  if(v.startsWith('254')) v='0'+v.slice(3);
+  if(v.startsWith('7')) v='0'+v;
+  return v;
+}
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            renderPackages();
-            lucide.createIcons();
-            
-            // Load saved phone
-            const savedPhone = localStorage.getItem('netsasa_phone');
-            if (savedPhone) {
-                document.getElementById('mpesaPhone').value = savedPhone;
-                document.getElementById('historyPhone').value = savedPhone;
-            }
-        });
+payBtn.addEventListener('click', async () => {
+  const phone = normalizePhone(document.getElementById('phone').value);
+  if (!phone.match(/^0\d{9}$/)) {
+    payMsg.textContent = 'Enter a valid phone number e.g. 0712345678';
+    return;
+  }
 
-        // Render Packages
-        function renderPackages() {
-            const grid = document.getElementById('packagesGrid');
-            grid.innerHTML = '';
-            
-            const filtered = currentFilter === 'all' 
-                ? packages 
-                : packages.filter(p => p.category === currentFilter);
-            
-            filtered.forEach((pkg, index) => {
-                const card = document.createElement('div');
-                card.className = `package-card glass-card rounded-2xl p-6 relative ${pkg.popular ? 'ring-2 ring-pink-500' : ''}`;
-                card.style.animationDelay = `${index * 0.1}s`;
-                
-                card.innerHTML = `
-                    ${pkg.popular ? `
-                        <div class="absolute -top-3 left-1/2 -translate-x-1/2">
-                            <span class="popular-badge px-4 py-1 rounded-full text-xs font-bold text-white shadow-lg">MOST POPULAR</span>
-                        </div>
-                    ` : ''}
-                    
-                    <div class="flex justify-between items-start mb-4">
-                        <div>
-                            <h4 class="text-xl font-bold mb-1">${pkg.name}</h4>
-                            <p class="text-sm text-gray-400">${pkg.description}</p>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-3xl font-bold text-indigo-400">KES ${pkg.price}</div>
-                            <div class="text-xs text-gray-500">${pkg.duration}</div>
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-2 mb-4">
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-400">Data</span>
-                            <span class="font-medium">${pkg.data}</span>
-                        </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-400">Speed</span>
-                            <span class="font-medium">${pkg.speed}</span>
-                        </div>
-                        <div class="flex justify-between text-sm">
-                            <span class="text-gray-400">Devices</span>
-                            <span class="font-medium">${pkg.devices}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="flex flex-wrap gap-2 mb-6">
-                        ${pkg.features.map(f => `
-                            <span class="px-2 py-1 bg-white/5 rounded text-xs text-gray-300">${f}</span>
-                        `).join('')}
-                    </div>
-                    
-                    <button onclick="openPaymentModal('${pkg.id}')" 
-                        class="w-full py-3 btn-primary rounded-xl font-semibold flex items-center justify-center gap-2 group">
-                        <span>Purchase Now</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
-                    </button>
-                `;
-                
-                grid.appendChild(card);
-            });
-            
-            lucide.createIcons();
-        }
+  loaderRow.classList.remove('hidden');
+  loaderText.textContent = 'Processing payment...';
+  payMsg.textContent = '';
+  payBtn.disabled = true;
 
-        // Filter Packages
-        function filterPackages(category) {
-            currentFilter = category;
-            
-            // Update buttons
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active', 'bg-indigo-600', 'border-indigo-500');
-                btn.classList.add('border-white/20');
-                if (btn.dataset.filter === category) {
-                    btn.classList.add('active', 'bg-indigo-600', 'border-indigo-500');
-                    btn.classList.remove('border-white/20');
-                }
-            });
-            
-            renderPackages();
-        }
+  try {
+    // Step 1: Initiate payment
+    const res = await fetch(PAY_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, amount: activePackage.price })
+    });
+    const json = await res.json();
 
-        // Payment Modal
-        function openPaymentModal(packageId) {
-            selectedPackage = packages.find(p => p.id === packageId);
-            if (!selectedPackage) return;
-            
-            document.getElementById('selectedPackageName').textContent = selectedPackage.name;
-            document.getElementById('selectedPackagePrice').textContent = `KES ${selectedPackage.price}`;
-            
-            // Reset modal state
-            document.getElementById('paymentStep1').classList.remove('hidden');
-            document.getElementById('paymentStep2').classList.add('hidden');
-            document.getElementById('paymentStep3').classList.add('hidden');
-            document.getElementById('paymentStep4').classList.add('hidden');
-            
-            const modal = document.getElementById('paymentModal');
-            const content = document.getElementById('paymentModalContent');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            
-            setTimeout(() => {
-                content.classList.remove('scale-95', 'opacity-0');
-                content.classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
+    loaderRow.classList.add('hidden');
 
-        function closePaymentModal() {
-            const modal = document.getElementById('paymentModal');
-            const content = document.getElementById('paymentModalContent');
-            
-            content.classList.remove('scale-100', 'opacity-100');
-            content.classList.add('scale-95', 'opacity-0');
-            
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-                
-                // Close SSE connection
-                if (eventSource) {
-                    eventSource.close();
-                    eventSource = null;
-                }
-            }, 300);
-        }
+    if (json.error) {
+      payMsg.textContent = json.error;
+      payBtn.disabled = false;
+      return;
+    }
 
-        function resetPaymentModal() {
-            document.getElementById('paymentStep1').classList.remove('hidden');
-            document.getElementById('paymentStep2').classList.add('hidden');
-            document.getElementById('paymentStep3').classList.add('hidden');
-            document.getElementById('paymentStep4').classList.add('hidden');
-        }
+    const checkoutId = json.CheckoutRequestID;
 
-        // Initiate Payment
-        async function initiatePayment() {
-            const phoneInput = document.getElementById('mpesaPhone');
-            let phone = phoneInput.value.trim();
-            
-            // Validate phone
-            phone = phone.replace(/\s/g, '').replace(/-/g, '');
-            if (phone.startsWith('+254')) phone = '0' + phone.slice(4);
-            if (phone.startsWith('254')) phone = '0' + phone.slice(3);
-            
-            if (!/^0\d{9}$/.test(phone)) {
-                showToast('Please enter a valid phone number (07XXXXXXXX)', 'error');
-                phoneInput.focus();
-                return;
-            }
-            
-            // Save phone if checked
-            if (document.getElementById('savePhone').checked) {
-                localStorage.setItem('netsasa_phone', phone);
-            }
-            
-            const btn = document.getElementById('payButton');
-            btn.disabled = true;
-            btn.innerHTML = '<div class="loading-spinner w-5 h-5 border-2"></div><span>Processing...</span>';
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/pay`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        phone: phone,
-                        amount: selectedPackage.price,
-                        package_id: selectedPackage.id
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success && data.checkout_request_id) {
-                    // Show processing step
-                    document.getElementById('paymentStep1').classList.add('hidden');
-                    document.getElementById('paymentStep2').classList.remove('hidden');
-                    document.getElementById('checkoutRequestId').textContent = data.checkout_request_id;
-                    
-                    // Start SSE
-                    startSSE(data.checkout_request_id);
-                } else {
-                    throw new Error(data.error || 'Payment initiation failed');
-                }
-                
-            } catch (error) {
-                console.error('Payment error:', error);
-                document.getElementById('paymentStep1').classList.add('hidden');
-                document.getElementById('paymentStep4').classList.remove('hidden');
-                document.getElementById('paymentErrorMessage').textContent = error.message;
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = '<span>Pay with M-Pesa</span><i data-lucide="arrow-right" class="w-5 h-5"></i>';
-                lucide.createIcons();
-            }
-        }
+    // Step 2: Connect to SSE stream for live updates
+    const evtSource = new EventSource(`https://netsasa-backend-1.onrender.com/api/stream/${checkoutId}`);
+    
+    evtSource.onmessage = function(e) {
+      const data = JSON.parse(e.data);
+      console.log("Payment update:", data);
 
-        // SSE for real-time updates
-        function startSSE(checkoutId) {
-            const statusText = document.getElementById('sseStatusText');
-            const statusIndicator = document.querySelector('.sse-status');
-            
-            eventSource = new EventSource(`${API_BASE_URL}/api/stream/${checkoutId}`);
-            
-            eventSource.onopen = () => {
-                console.log('SSE connection opened');
-                statusText.textContent = 'Waiting for payment confirmation...';
-            };
-            
-            eventSource.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-                console.log('SSE message:', data);
-                
-                if (data.type === 'ping') return;
-                
-                switch (data.status) {
-                    case 'success':
-                        statusText.textContent = 'Payment confirmed!';
-                        statusIndicator.classList.remove('waiting');
-                        statusIndicator.classList.add('text-green-400');
-                        
-                        setTimeout(() => {
-                            document.getElementById('paymentStep2').classList.add('hidden');
-                            document.getElementById('paymentStep3').classList.remove('hidden');
-                            createConfetti();
-                        }, 500);
-                        
-                        eventSource.close();
-                        break;
-                        
-                    case 'failed':
-                        statusText.textContent = 'Payment failed';
-                        statusIndicator.classList.remove('waiting');
-                        statusIndicator.classList.add('error');
-                        
-                        setTimeout(() => {
-                            document.getElementById('paymentStep2').classList.add('hidden');
-                            document.getElementById('paymentStep4').classList.remove('hidden');
-                            document.getElementById('paymentErrorMessage').textContent = 'Payment was declined. Please check your M-Pesa balance and try again.';
-                        }, 500);
-                        
-                        eventSource.close();
-                        break;
-                        
-                    case 'cancelled':
-                        statusText.textContent = 'Payment cancelled';
-                        statusIndicator.classList.remove('waiting');
-                        statusIndicator.classList.add('error');
-                        
-                        setTimeout(() => {
-                            document.getElementById('paymentStep2').classList.add('hidden');
-                            document.getElementById('paymentStep4').classList.remove('hidden');
-                            document.getElementById('paymentErrorMessage').textContent = 'Payment was cancelled or timed out. Please try again.';
-                        }, 500);
-                        
-                        eventSource.close();
-                        break;
-                }
-            };
-            
-            eventSource.onerror = (error) => {
-                console.error('SSE error:', error);
-                statusText.textContent = 'Connection error. Checking status...';
-                
-                // Fallback to polling
-                pollStatus(checkoutId);
-            };
-        }
+      if (data.status === "success") {
+        loaderRow.classList.add('hidden');
+        startConfetti();
+        payMsg.innerHTML = '<span class="success-msg">✅ Payment completed!</span>';
+        setTimeout(() => { stopConfetti(); closePay(); payBtn.disabled = false; }, 4000);
+        evtSource.close();
+      } else if (data.status === "cancelled") {
+        loaderRow.classList.add('hidden');
+        payMsg.innerHTML = '<span class="text-red-500 font-bold">❌ Payment cancelled.</span>';
+        evtSource.close();
+        payBtn.disabled = false;
+      } else if (data.status === "pending") {
+        loaderRow.classList.remove('hidden');
+        loaderText.textContent = 'Payment pending...';
+      }
+    };
 
-        // Polling fallback
-        async function pollStatus(checkoutId) {
-            const maxAttempts = 30;
-            let attempts = 0;
-            
-            const interval = setInterval(async () => {
-                attempts++;
-                
-                try {
-                    const response = await fetch(`${API_BASE_URL}/api/check/${checkoutId}`);
-                    const data = await response.json();
-                    
-                    if (data.status === 'success') {
-                        clearInterval(interval);
-                        document.getElementById('paymentStep2').classList.add('hidden');
-                        document.getElementById('paymentStep3').classList.remove('hidden');
-                        createConfetti();
-                    } else if (data.status === 'failed' || data.status === 'cancelled') {
-                        clearInterval(interval);
-                        document.getElementById('paymentStep2').classList.add('hidden');
-                        document.getElementById('paymentStep4').classList.remove('hidden');
-                    }
-                    
-                    if (attempts >= maxAttempts) {
-                        clearInterval(interval);
-                    }
-                } catch (error) {
-                    console.error('Polling error:', error);
-                }
-            }, 2000);
-        }
+    evtSource.onerror = function(e) {
+      console.error("SSE error", e);
+      loaderRow.classList.add('hidden');
+      payMsg.textContent = 'Payment error. Try again.';
+      payBtn.disabled = false;
+      evtSource.close();
+    };
 
-        // Transaction History
-        async function loadTransactions() {
-            const phoneInput = document.getElementById('historyPhone');
-            let phone = phoneInput.value.trim();
-            
-            phone = phone.replace(/\s/g, '').replace(/-/g, '');
-            if (phone.startsWith('+254')) phone = '0' + phone.slice(4);
-            if (phone.startsWith('254')) phone = '0' + phone.slice(3);
-            
-            if (!/^0\d{9}$/.test(phone)) {
-                showToast('Please enter a valid phone number', 'error');
-                return;
-            }
-            
-            const list = document.getElementById('transactionsList');
-            list.innerHTML = `
-                <div class="flex justify-center py-8">
-                    <div class="loading-spinner"></div>
-                </div>
-            `;
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/transactions/${phone}`);
-                const data = await response.json();
-                
-                if (data.transactions && data.transactions.length > 0) {
-                    list.innerHTML = data.transactions.map(t => `
-                        <div class="transaction-item flex items-center justify-between p-4 rounded-xl bg-white/5 hover:bg-white/10 transition">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-full ${t.status === 'success' ? 'bg-green-500/20' : t.status === 'pending' ? 'bg-yellow-500/20' : 'bg-red-500/20'} flex items-center justify-center">
-                                    <i data-lucide="${t.status === 'success' ? 'check' : t.status === 'pending' ? 'clock' : 'x'}" class="w-5 h-5 ${t.status === 'success' ? 'text-green-400' : t.status === 'pending' ? 'text-yellow-400' : 'text-red-400'}"></i>
-                                </div>
-                                <div>
-                                    <p class="font-medium">${t.package || 'Wi-Fi Package'}</p>
-                                    <p class="text-xs text-gray-500">${new Date(t.created_at).toLocaleString()}</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold">KES ${t.amount}</p>
-                                <span class="text-xs px-2 py-1 rounded-full ${t.status === 'success' ? 'bg-green-500/20 text-green-400' : t.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400'} capitalize">${t.status}</span>
-                            </div>
-                        </div>
-                    `).join('');
-                    lucide.createIcons();
-                } else {
-                    list.innerHTML = `
-                        <div class="text-center py-12 text-gray-500">
-                            <i data-lucide="inbox" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
-                            <p>No transactions found for this number</p>
-                        </div>
-                    `;
-                    lucide.createIcons();
-                }
-                
-            } catch (error) {
-                console.error('Error loading transactions:', error);
-                list.innerHTML = `
-                    <div class="text-center py-12 text-red-400">
-                        <i data-lucide="alert-circle" class="w-12 h-12 mx-auto mb-3"></i>
-                        <p>Failed to load transactions. Please try again.</p>
-                    </div>
-                `;
-                lucide.createIcons();
-            }
-        }
+    // Immediately show “initiated” message
+    startConfetti();
+    payMsg.innerHTML = '<span class="success-msg">✅ Payment initiated! Check your phone.</span>';
 
-        function refreshTransactions() {
-            const phone = document.getElementById('historyPhone').value;
-            if (phone) {
-                loadTransactions();
-            }
-        }
+  } catch (e) {
+    console.error(e);
+    loaderRow.classList.add('hidden');
+    payMsg.textContent = 'Payment error. Try again.';
+    payBtn.disabled = false;
+  }
+});
 
-        // Help Modal
-        function showHelp() {
-            const modal = document.getElementById('helpModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
+// Terms modal animation
+const termsModal = document.getElementById('termsModal');
+const showTerms = document.getElementById('showTerms');
+const termsCard = document.getElementById('termsCard');
 
-        function closeHelpModal() {
-            const modal = document.getElementById('helpModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
+showTerms.addEventListener('click', () => {
+  termsModal.style.display = 'flex';
+  termsCard.classList.add('scale-in', 'fade-in');
+});
 
-        // Legal Modals
-        function showTerms() {
-            document.getElementById('legalModalTitle').textContent = 'Terms of Service';
-            document.getElementById('legalModalContent').innerHTML = `
-                <p class="mb-4">By using NETSASA services, you agree to these terms:</p>
-                <ul class="list-disc list-inside space-y-2 mb-4">
-                    <li>All payments are final and non-refundable except in cases of service failure.</li>
-                    <li>Packages expire as specified in the duration. Unused data does not roll over.</li>
-                    <li>Users must comply with fair use policies. Excessive usage may result in throttling.</li>
-                    <li>NETSASA reserves the right to suspend accounts for illegal activities.</li>
-                    <li>Service availability is subject to network conditions and maintenance.</li>
-                </ul>
-                <p>For complete terms, please contact support.</p>
-            `;
-            document.getElementById('legalModal').classList.remove('hidden');
-            document.getElementById('legalModal').classList.add('flex');
-        }
+termsModal.addEventListener('click', (e) => {
+  if(e.target === termsModal){
+    termsModal.style.display = 'none';
+    termsCard.classList.remove('scale-in', 'fade-in');
+  }
+});
 
-        function showPrivacy() {
-            document.getElementById('legalModalTitle').textContent = 'Privacy Policy';
-            document.getElementById('legalModalContent').innerHTML = `
-                <p class="mb-4">NETSASA is committed to protecting your privacy:</p>
-                <ul class="list-disc list-inside space-y-2 mb-4">
-                    <li>We collect only necessary information: phone number and payment details.</li>
-                    <li>Your data is encrypted and stored securely.</li>
-                    <li>We do not sell or share your personal information with third parties.</li>
-                    <li>Payment processing is handled securely by M-Pesa.</li>
-                    <li>You may request deletion of your data at any time.</li>
-                </ul>
-            `;
-            document.getElementById('legalModal').classList.remove('hidden');
-            document.getElementById('legalModal').classList.add('flex');
-        }
-
-        function showRefund() {
-            document.getElementById('legalModalTitle').textContent = 'Refund Policy';
-            document.getElementById('legalModalContent').innerHTML = `
-                <p class="mb-4">Our refund policy is as follows:</p>
-                <ul class="list-disc list-inside space-y-2 mb-4">
-                    <li>Refunds are only issued for failed transactions where service was not delivered.</li>
-                    <li>Requests must be made within 24 hours of the transaction.</li>
-                    <li>Refunds are processed to the original M-Pesa number within 3-5 business days.</li>
-                    <li>No refunds for partially used packages or change of mind.</li>
-                </ul>
-            `;
-            document.getElementById('legalModal').classList.remove('hidden');
-            document.getElementById('legalModal').classList.add('flex');
-        }
-
-        function closeLegalModal() {
-            document.getElementById('legalModal').classList.add('hidden');
-            document.getElementById('legalModal').classList.remove('flex');
-        }
-
-        // Toast Notifications
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            
-            const colors = {
-                success: 'bg-green-500',
-                error: 'bg-red-500',
-                warning: 'bg-yellow-500',
-                info: 'bg-indigo-500'
-            };
-            
-            const icons = {
-                success: 'check-circle',
-                error: 'x-circle',
-                warning: 'alert-triangle',
-                info: 'info'
-            };
-            
-            toast.className = `toast flex items-center gap-3 px-6 py-4 rounded-xl ${colors[type]} text-white shadow-lg min-w-[300px]`;
-            toast.innerHTML = `
-                <i data-lucide="${icons[type]}" class="w-5 h-5"></i>
-                <span class="font-medium">${message}</span>
-            `;
-            
-            container.appendChild(toast);
-            lucide.createIcons();
-            
-            setTimeout(() => toast.classList.add('show'), 10);
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, 4000);
-        }
-
-        // Confetti Effect
-        function createConfetti() {
-            const container = document.getElementById('confettiContainer');
-            const colors = ['#6366F1', '#8B5CF6', '#EC4899', '#10B981', '#F59E0B'];
-            
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDelay = Math.random() * 2 + 's';
-                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                container.appendChild(confetti);
-                
-                setTimeout(() => confetti.remove(), 4000);
-            }
-        }
-
-        // Mobile Menu
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
-        }
-
-        // Close modals on outside click
-        document.getElementById('paymentModal').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) closePaymentModal();
-        });
-
-        document.getElementById('helpModal').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) closeHelpModal();
-        });
-
-        document.getElementById('legalModal').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) closeLegalModal();
-        });
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closePaymentModal();
-                closeHelpModal();
-                closeLegalModal();
-            }
-        });
-
-        console.log('🚀 NETSASA Frontend loaded with 10 premium packages');
-        console.log('💰 All packages priced at KES 10 or above');
-    </script>
-</body>
-</html>
+// ---------- Confetti logic ----------
+const confettiCanvas=document.getElementById('confettiCanvas');
+const confettiCtx=confettiCanvas.getContext('2d');
+let confettiParticles=[];
+function resizeCanvas(){confettiCanvas.width=window.innerWidth; confettiCanvas.height=window.innerHeight;}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+function createConfetti(count=150){
+  confettiParticles=[];
+  for(let i=0;i<count;i++){
+    confettiParticles.push({
+      x: Math.random()*window.innerWidth,
+      y: Math.random()*window.innerHeight-window.innerHeight,
+      r: Math.random()*6+4,
+      d: Math.random()*count,
+      color:`hsl(${Math.random()*360},100%,50%)`,
+      tilt:Math.random()*10-10,
+      tiltAngleIncrement: Math.random()*0.07+0.05,
+      tiltAngle:0
+    });
+  }
+}
+function drawConfetti(){
+  confettiCtx.clearRect(0,0,window.innerWidth,window.innerHeight);
+  confettiParticles.forEach(p=>{
+    confettiCtx.beginPath();
+    confettiCtx.lineWidth=p.r/2;
+    confettiCtx.strokeStyle=p.color;
+    confettiCtx.moveTo(p.x+p.tilt+p.r/4,p.y);
+    confettiCtx.lineTo(p.x+p.tilt,p.y+p.tilt+p.r/4);
+    confettiCtx.stroke();
+  });
+  updateConfetti();
+}
+function updateConfetti(){
+  confettiParticles.forEach((p,i)=>{
+    p.tiltAngle+=p.tiltAngleIncrement;
+    p.y+=(Math.cos(p.d)+3+p.r/2)/2;
+    p.x+=Math.sin(p.d);
+    p.tilt=Math.sin(p.tiltAngle)*12;
+    if(p.y>window.innerHeight){
+      confettiParticles[i]={...p, y:-10};
+    }
+  });
+}
+let confettiAnim;
+function startConfetti(){ confettiCanvas.classList.remove('hidden'); createConfetti(); confettiAnim=setInterval(drawConfetti,16); }
+function stopConfetti(){ clearInterval(confettiAnim); confettiCanvas.classList.add('hidden'); confettiCtx.clearRect(0,0,window.innerWidth,window.innerHeight); }
+</script>
+</body
