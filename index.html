@@ -236,17 +236,18 @@ function listenSSE(checkoutId){
     const data = JSON.parse(e.data);
     console.log("SSE event:", data);
 
-    if(data.status === "success"){
-      evt.close();
-      closePay();
-      clearInterval(paymentCountdownInterval);
-      startSession(activePackage.seconds);
-    }
-    if(data.status === "failed" || data.status === "cancelled"){
-      evt.close();
-      clearInterval(paymentCountdownInterval);
-      document.getElementById('payMsg').innerText = "Payment failed or cancelled";
-    }
+    if(data.status && data.status.toLowerCase() === "success"){
+  evt.close();
+  closePay();
+  clearInterval(paymentCountdownInterval);
+  startSession(activePackage.seconds);
+}
+
+if(data.status && (data.status.toLowerCase() === "failed" || data.status.toLowerCase() === "cancelled")){
+  evt.close();
+  clearInterval(paymentCountdownInterval);
+  document.getElementById('payMsg').innerText = "Payment failed or cancelled";
+}
     if(data.status === "pending"){
       // keep countdown running
     }
@@ -285,5 +286,6 @@ function startSession(seconds){
   }, 1000);
 }
 </script>
+
 
 
