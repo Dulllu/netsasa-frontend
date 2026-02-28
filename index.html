@@ -1,361 +1,248 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NETSASA — Pocket-friendly Wi-Fi for Everyone</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>NETSASA — Pocket-friendly Wi-Fi for Everyone</title>
 
-  <meta name="description" content="NETSASA — Pay instantly via M-Pesa and get connected to Wi-Fi in Kakamega. Fast, reliable and pocket-friendly internet access.">
-  <link rel="icon" href="/favicon.png" type="image/png">
-  <link rel="manifest" href="/manifest.json">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<meta name="description" content="NETSASA — Fast, reliable, pocket-friendly Wi-Fi in Kakamega. Pay instantly via M-Pesa and connect immediately.">
+<link rel="icon" href="/favicon.png" type="image/png">
 
-  <style>
-    :root{
-      --glass-bg: rgba(255,255,255,0.06);
-      --glass-strong: rgba(255,255,255,0.08);
-      --accent: #6366F1;
-      --green: #10B981;
-    }
+<script src="https://cdn.tailwindcss.com"></script>
 
-    .glass { background: var(--glass-bg); backdrop-filter: blur(8px); }
-    .glass-strong { background: var(--glass-strong); backdrop-filter: blur(10px); }
-    .fade-in { animation: fadeIn .18s ease both; }
-    .scale-in { animation: scaleIn .18s cubic-bezier(.2,.9,.3,1) both; }
-    @keyframes fadeIn { from {opacity:0} to {opacity:1} }
-    @keyframes scaleIn { from {transform: translateY(8px) scale(.98); opacity:0} to {transform: translateY(0) scale(1); opacity:1} }
-
-    .lds-ring { display:inline-block; position:relative; width:36px; height:36px; }
-    .lds-ring div { box-sizing: border-box; display:block; position:absolute;
-      width:28px; height:28px; margin:4px; border:3px solid currentColor;
-      border-radius:50%; animation:lds-ring 1.2s cubic-bezier(.5,0,.5,1) infinite;
-      border-color: currentColor transparent transparent transparent; }
-    .lds-ring div:nth-child(1){ animation-delay:-.45s; }
-    .lds-ring div:nth-child(2){ animation-delay:-.3s; }
-    .lds-ring div:nth-child(3){ animation-delay:-.15s; }
-    @keyframes lds-ring { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
-
-    .success-msg { display: flex; align-items: center; gap: 10px; font-weight: bold; color: var(--green); margin-top: 1rem; }
-
-    /* WhatsApp button */
-    #whatsappBtn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #25D366;
-      color: white;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 28px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      z-index: 1100;
-      transition: transform 0.2s;
-    }
-    #whatsappBtn:hover { transform: scale(1.1); }
-
-    /* Terms modal */
-    #termsModal { display: none; position: fixed; inset:0; background: rgba(0,0,0,0.6); z-index: 1050; align-items: center; justify-content: center; }
-    #termsCard { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); padding: 2rem; border-radius: 1.5rem; max-width: 600px; color: #E0E7FF; max-height: 80vh; overflow-y: auto; }
-    #termsCard h2 { font-size: 1.25rem; margin-top: 1rem; font-weight: 600; }
-    #termsCard p { margin-top: 0.5rem; font-size: 0.95rem; line-height: 1.4rem; }
-  </style>
+<style>
+:root{
+  --glass-bg: rgba(255,255,255,0.06);
+  --glass-strong: rgba(255,255,255,0.09);
+}
+.glass{background:var(--glass-bg);backdrop-filter:blur(10px)}
+.glass-strong{background:var(--glass-strong);backdrop-filter:blur(14px)}
+.status-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px}
+.online{background:#10B981}
+.offline{background:#ef4444}
+</style>
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-sky-900 via-indigo-900 to-violet-800 text-sky-50 antialiased selection:bg-indigo-700 selection:text-white">
+<body class="min-h-screen bg-gradient-to-br from-sky-900 via-indigo-900 to-violet-800 text-sky-50">
 
-<header class="max-w-6xl mx-auto p-6 flex items-center justify-between gap-4">
-  <div>
-    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">NETSASA</h1>
-    <p class="text-sky-200 mt-1 text-sm">Pocket-friendly Wi-Fi for Everyone — Pay & connect instantly.</p>
-  </div>
-  <div class="text-right hidden sm:block">
-    <p class="text-sm text-sky-200">Location: <span class="font-medium">KAKAMEGA</span></p>
-    <p class="text-xs text-sky-300">No signup required — just pay and get connected.</p>
-  </div>
+<!-- ================= HERO ================= -->
+<header class="max-w-6xl mx-auto p-6 flex justify-between items-center">
+<div>
+<h1 class="text-3xl font-extrabold tracking-wide">NETSASA</h1>
+<p class="text-sky-200 text-sm">Fast. Affordable. Instant.</p>
+</div>
+<a href="#packages" class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700">
+Get Connected
+</a>
 </header>
 
-<main class="max-w-6xl mx-auto p-6">
-  <section id="packagesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></section>
-  <div class="mt-6 text-sky-300 text-xs max-w-3xl">
-    <p>By purchasing you agree to <span id="showTerms" class="underline cursor-pointer text-sky-100">Terms & Fair Use Policy</span>. Abuse may result in disconnection.</p>
-  </div>
-</main>
+<section class="max-w-6xl mx-auto px-6 py-16 text-center">
+<h2 class="text-4xl font-extrabold mb-6">
+Pocket-Friendly Wi-Fi for Everyone
+</h2>
+<p class="text-sky-200 max-w-2xl mx-auto">
+Pay via M-Pesa and get connected instantly. No delays. No paperwork. Just fast internet when you need it.
+</p>
+</section>
 
-<!-- Payment Modal -->
-<div id="payModal" class="fixed inset-0 hidden items-center justify-center bg-black/60 z-50 fade-in" aria-hidden="true">
-  <div id="payCard" class="glass-strong w-11/12 max-w-md p-6 rounded-2xl scale-in" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="flex items-start justify-between">
-      <div>
-        <h3 id="modalTitle" class="text-xl font-semibold leading-tight">Buy Package</h3>
-        <p id="modalPrice" class="text-sky-200 mt-1 text-sm"></p>
-      </div>
-      <button id="closeModal" aria-label="Close" class="text-sky-200 hover:text-white rounded p-1">✕</button>
-    </div>
-    <label class="block text-sm text-sky-200 mt-4">Safaricom Number</label>
-    <input id="phone" inputmode="tel" autocomplete="tel" maxlength="10" class="w-full mt-2 rounded-lg px-4 py-3 bg-transparent border border-white/10 text-sky-50 placeholder:text-sky-400 focus:outline-none focus:ring-2 focus:ring-indigo-400" placeholder="e.g. 0718912019">
-    <div id="loaderRow" class="mt-4 hidden items-center gap-3">
-      <div class="lds-ring text-green-400"><div></div><div></div><div></div><div></div></div>
-      <p id="loaderText" class="text-sm text-sky-200">Processing payment...</p>
-    </div>
-    <p id="payMsg" class="mt-4 text-sm text-sky-200"></p>
-    <div class="mt-6 flex justify-end gap-3">
-      <button id="cancelBtn" class="px-4 py-3 rounded-lg border border-white/10 text-sm">Cancel</button>
-      <button id="payBtn" class="px-5 py-3 rounded-lg bg-gradient-to-r from-indigo-600 to-indigo-500 text-white text-sm shadow-lg hover:brightness-105">Pay & Connect</button>
-    </div>
-  </div>
+<!-- ================= FEATURES ================= -->
+<section class="max-w-6xl mx-auto px-6 py-10 grid md:grid-cols-3 gap-6">
+<div class="glass rounded-2xl p-6">
+<h3 class="font-semibold text-lg mb-2">⚡ Instant Activation</h3>
+<p class="text-sky-200 text-sm">Pay and get connected immediately after confirmation.</p>
 </div>
 
-<!-- Terms Modal -->
-<div id="termsModal" class="fade-in hidden flex items-center justify-center">
-  <div id="termsCard" class="scale-in">
-    <h1 class="text-2xl font-bold">Terms & Fair Use Policy</h1>
-    <h2>General Terms</h2>
-    <p>By using NETSASA Wi-Fi, you agree to pay for the purchased packages as indicated. Misuse or fraudulent activity will result in immediate disconnection.</p>
-
-    <h2>Fair Use Policy</h2>
-    <p>NETSASA Wi-Fi is meant for personal browsing and social use. Heavy downloads, torrenting, streaming beyond package limits, or network abuse may lead to temporary or permanent suspension.</p>
-
-    <h2>Support & Contact</h2>
-    <p>For help, chat with us on WhatsApp: <a href="https://wa.me/254718912019" target="_blank" class="underline">0718912019</a></p>
-  </div>
+<div class="glass rounded-2xl p-6">
+<h3 class="font-semibold text-lg mb-2">📱 Easy M-Pesa Payment</h3>
+<p class="text-sky-200 text-sm">Secure STK push directly to your phone.</p>
 </div>
 
-<!-- Confetti Canvas -->
-<canvas id="confettiCanvas" class="fixed inset-0 pointer-events-none z-50 hidden"></canvas>
+<div class="glass rounded-2xl p-6">
+<h3 class="font-semibold text-lg mb-2">🔥 Affordable Packages</h3>
+<p class="text-sky-200 text-sm">Short sessions and long sessions. Pay only for what you need.</p>
+</div>
+</section>
 
-<!-- WhatsApp Help Button -->
-<a href="https://wa.me/254718912019" target="_blank" id="whatsappBtn" aria-label="Chat with us on WhatsApp">
-  <i class="fab fa-whatsapp"></i>
+<!-- ================= PACKAGES ================= -->
+<section id="packages" class="max-w-6xl mx-auto px-6 py-16">
+<h2 class="text-2xl font-bold mb-8 text-center">Choose Your Package</h2>
+
+<div id="packagesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+</section>
+
+<!-- ================= SUPPORT ================= -->
+<section class="max-w-6xl mx-auto px-6 py-12 text-center">
+<div class="glass rounded-2xl p-8">
+<h3 class="text-xl font-semibold mb-3">Need Help?</h3>
+<p class="text-sky-200 text-sm mb-6">
+If you experience any issue, contact support immediately.
+</p>
+<a href="https://wa.me/254700000000"
+class="px-6 py-3 rounded-lg bg-green-600 hover:bg-green-700">
+WhatsApp Support
 </a>
+</div>
+</section>
 
-<footer class="max-w-6xl mx-auto p-6 text-center text-sky-200 text-sm">
-  <p>© NETSASA • Instant Access • M-Pesa Integrated</p>
+<!-- ================= FOOTER ================= -->
+<footer class="max-w-6xl mx-auto px-6 py-10 text-center text-sky-300 text-sm">
+© 2026 NETSASA. All rights reserved.
 </footer>
 
+<!-- ================= PAYMENT MODAL ================= -->
+<div id="payModal" class="fixed inset-0 hidden items-center justify-center bg-black/60 z-50">
+<div class="glass-strong w-11/12 max-w-md p-6 rounded-2xl">
+<h3 id="modalTitle" class="text-xl font-semibold"></h3>
+<p id="modalPrice" class="text-sky-200 text-sm"></p>
+
+<input id="phone" maxlength="10"
+class="w-full mt-4 rounded-lg px-4 py-3 bg-transparent border border-white/10"
+placeholder="0712345678">
+
+<p id="payMsg" class="mt-4 text-sm text-sky-200"></p>
+
+<div class="mt-6 flex justify-end gap-3">
+<button onclick="closePay()">Cancel</button>
+<button id="payBtn" class="px-5 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-700">
+Pay & Connect
+</button>
+</div>
+</div>
+</div>
+
+<!-- ================= SESSION MODAL ================= -->
+<div id="sessionModal" class="fixed inset-0 hidden items-center justify-center bg-black/60 z-50">
+<div class="glass-strong w-11/12 max-w-md p-6 rounded-2xl text-center">
+<h2 class="text-xl font-bold mb-2">Connected 🎉</h2>
+<div>
+<span id="statusDot" class="status-dot online"></span>
+<span id="sessionStatus">Active</span>
+</div>
+<div id="countdown" class="text-3xl font-bold mt-4"></div>
+</div>
+</div>
+
 <script>
-const PAY_API = 'https://netsasa-backend-1.onrender.com/api/pay';
-const packages = [
-  { id: 'p1', name: 'Mwangaza 20', price: 5, duration: '20 minutes', details: 'Quick browse & messages' },
-  { id: 'p2', name: 'Sawa 50', price: 10, duration: '50 minutes', details: 'Light browsing & social' },
-  { id: 'p3', name: 'Leo 1hr', price: 20, duration: '1 hour', details: 'Streaming lite & browsing' },
-  { id: 'p4', name: 'Kipindi 3hr', price: 50, duration: '3 hours', details: 'Study session' },
-  { id: 'p5', name: 'Siku 1 Day', price: 60, duration: '24 hours', details: 'All-day access' },
-  { id: 'p6', name: 'Usiku', price: 40, duration: 'Night pack (21:00-06:00)', details: 'Cheap night access' },
-  { id: 'p7', name: 'Social 1hr', price: 15, duration: '1 hour', details: 'Access to social apps only' },
-  { id: 'p8', name: 'DataLite 800MB', price: 30, duration: '800 MB', details: 'Small data bundle' },
-  { id: 'p9', name: 'Weekend 48hr', price: 150, duration: '48 hours', details: 'Weekend surf' },
-  { id: 'p10', name: 'Wiki 7 Day', price: 400, duration: '7 days', details: 'Weekly plan for heavy users' }
+const BASE_URL="https://netsasa.onrender.com";
+const PAY_API=BASE_URL+"/api/pay";
+
+const packages=[
+{ id:'p2', name:'Sawa 50', price:10, duration:'50 minutes', seconds:3000 },
+{ id:'p3', name:'Leo 1hr', price:20, duration:'1 hour', seconds:3600 },
+{ id:'pNEW', name:'Power 2hr 🔥', price:35, duration:'2 hours', seconds:7200 },
+{ id:'p4', name:'Kipindi 3hr', price:50, duration:'3 hours', seconds:10800 },
+{ id:'p5', name:'Siku 1 Day', price:100, duration:'24 hours', seconds:86400 },
+{ id:'p9', name:'Weekend 48hr', price:150, duration:'48 hours', seconds:172800 },
+{ id:'p10', name:'Wiki 7 Day', price:400, duration:'7 days', seconds:604800 }
 ];
 
-const grid = document.getElementById('packagesGrid');
-const payModal = document.getElementById('payModal');
-const payBtn = document.getElementById('payBtn');
-const cancelBtn = document.getElementById('cancelBtn');
-const closeModal = document.getElementById('closeModal');
-const loaderRow = document.getElementById('loaderRow');
-const loaderText = document.getElementById('loaderText');
-const payMsg = document.getElementById('payMsg');
-let activePackage = null;
+let activePackage=null;
+let countdownInterval=null;
+const grid=document.getElementById('packagesGrid');
 
-// Render package cards
-packages.forEach(p => {
-  const card = document.createElement('article');
-  card.className = 'rounded-2xl p-5 glass shadow hover:scale-[1.01] transition transform';
-  card.innerHTML = `
-    <div class="flex items-start justify-between gap-3">
-      <div>
-        <h3 class="text-lg sm:text-xl font-semibold">${p.name}</h3>
-        <p class="text-sm text-sky-200 mt-1">${p.details}</p>
-      </div>
-      <div class="text-right">
-        <div class="text-2xl font-bold">KES ${p.price}</div>
-        <div class="text-xs text-sky-300">${p.duration}</div>
-      </div>
-    </div>
-    <div class="mt-4">
-      <button onclick="openPay('${p.id}')" class="w-full px-4 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-medium">Pay & Connect</button>
-    </div>
-  `;
-  grid.appendChild(card);
+packages.forEach(p=>{
+const card=document.createElement('article');
+card.className='rounded-2xl p-5 glass';
+card.innerHTML=`
+<h3 class="text-lg font-semibold">${p.name}</h3>
+<div class="text-2xl font-bold mt-2">KES ${p.price}</div>
+<div class="text-xs text-sky-300">${p.duration}</div>
+<button onclick="openPay('${p.id}')" 
+class="mt-4 w-full px-4 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-700">
+Pay & Connect</button>`;
+grid.appendChild(card);
 });
 
-// Payment modal logic
 function openPay(id){
-  activePackage = packages.find(x=>x.id===id);
-  document.getElementById('modalTitle').textContent = `Buy ${activePackage.name}`;
-  document.getElementById('modalPrice').textContent = `KES ${activePackage.price} • ${activePackage.duration}`;
-  document.getElementById('phone').value = '';
-  payMsg.textContent = '';
-  loaderRow.classList.add('hidden');
-  payModal.classList.remove('hidden');
-  payModal.setAttribute('aria-hidden','false');
-  document.getElementById('phone').focus();
+activePackage=packages.find(x=>x.id===id);
+document.getElementById('modalTitle').innerText=`Buy ${activePackage.name}`;
+document.getElementById('modalPrice').innerText=`KES ${activePackage.price}`;
+document.getElementById('payModal').classList.remove('hidden');
 }
 
 function closePay(){
-  payModal.classList.add('hidden');
-  payModal.setAttribute('aria-hidden','true');
-  payMsg.textContent = '';
-  loaderRow.classList.add('hidden');
+document.getElementById('payModal').classList.add('hidden');
+document.getElementById('payMsg').innerText="";
 }
-
-payModal.addEventListener('click', e=>{if(e.target===payModal) closePay();});
-closeModal.addEventListener('click', closePay);
-cancelBtn.addEventListener('click', closePay);
 
 function normalizePhone(v){
-  v = v.replace(/\s|\-|\(|\)/g,'');
-  if(v.startsWith('+')) v=v.slice(1);
-  if(v.startsWith('254')) v='0'+v.slice(3);
-  if(v.startsWith('7')) v='0'+v;
-  return v;
+v=v.replace(/\D/g,'');
+if(v.startsWith('07')) return '254'+v.slice(1);
+if(v.startsWith('254')) return v;
+return null;
 }
 
-payBtn.addEventListener('click', async () => {
-  const phone = normalizePhone(document.getElementById('phone').value);
-  if (!phone.match(/^0\d{9}$/)) {
-    payMsg.textContent = 'Enter a valid phone number e.g. 0712345678';
-    return;
-  }
+document.getElementById('payBtn').addEventListener('click',async()=>{
+const phone=normalizePhone(document.getElementById('phone').value);
+if(!phone){document.getElementById('payMsg').innerText="Invalid phone number";return;}
 
-  loaderRow.classList.remove('hidden');
-  loaderText.textContent = 'Processing payment...';
-  payMsg.textContent = '';
-  payBtn.disabled = true;
+document.getElementById('payMsg').innerText="Processing payment...";
 
-  try {
-    // Step 1: Initiate payment
-    const res = await fetch(PAY_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone, amount: activePackage.price })
-    });
-    const json = await res.json();
+try{
+const res=await fetch(PAY_API,{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({ phone, package_id:activePackage.id })
+});
+const json=await res.json();
 
-    loaderRow.classList.add('hidden');
+if(!json.checkout_id){
+document.getElementById('payMsg').innerText="Payment failed";
+return;
+}
 
-    if (json.error) {
-      payMsg.textContent = json.error;
-      payBtn.disabled = false;
-      return;
-    }
+listenSSE(json.checkout_id);
 
-    const checkoutId = json.CheckoutRequestID;
-
-    // Step 2: Connect to SSE stream for live updates
-    const evtSource = new EventSource(`https://netsasa-backend-1.onrender.com/api/stream/${checkoutId}`);
-    
-    evtSource.onmessage = function(e) {
-      const data = JSON.parse(e.data);
-      console.log("Payment update:", data);
-
-      if (data.status === "success") {
-        loaderRow.classList.add('hidden');
-        startConfetti();
-        payMsg.innerHTML = '<span class="success-msg">✅ Payment completed!</span>';
-        setTimeout(() => { stopConfetti(); closePay(); payBtn.disabled = false; }, 4000);
-        evtSource.close();
-      } else if (data.status === "cancelled") {
-        loaderRow.classList.add('hidden');
-        payMsg.innerHTML = '<span class="text-red-500 font-bold">❌ Payment cancelled.</span>';
-        evtSource.close();
-        payBtn.disabled = false;
-      } else if (data.status === "pending") {
-        loaderRow.classList.remove('hidden');
-        loaderText.textContent = 'Payment pending...';
-      }
-    };
-
-    evtSource.onerror = function(e) {
-      console.error("SSE error", e);
-      loaderRow.classList.add('hidden');
-      payMsg.textContent = 'Payment error. Try again.';
-      payBtn.disabled = false;
-      evtSource.close();
-    };
-
-    // Immediately show “initiated” message
-    startConfetti();
-    payMsg.innerHTML = '<span class="success-msg">✅ Payment initiated! Check your phone.</span>';
-
-  } catch (e) {
-    console.error(e);
-    loaderRow.classList.add('hidden');
-    payMsg.textContent = 'Payment error. Try again.';
-    payBtn.disabled = false;
-  }
+}catch{
+document.getElementById('payMsg').innerText="Server error";
+}
 });
 
-// Terms modal animation
-const termsModal = document.getElementById('termsModal');
-const showTerms = document.getElementById('showTerms');
-const termsCard = document.getElementById('termsCard');
+function listenSSE(id){
+const evt=new EventSource(BASE_URL+"/api/stream/"+id);
 
-showTerms.addEventListener('click', () => {
-  termsModal.style.display = 'flex';
-  termsCard.classList.add('scale-in', 'fade-in');
-});
+evt.onmessage=(e)=>{
+const data=JSON.parse(e.data);
 
-termsModal.addEventListener('click', (e) => {
-  if(e.target === termsModal){
-    termsModal.style.display = 'none';
-    termsCard.classList.remove('scale-in', 'fade-in');
-  }
-});
+if(data.status==="success"){
+evt.close();
+closePay();
+startSession(activePackage.seconds);
+}
 
-// ---------- Confetti logic ----------
-const confettiCanvas=document.getElementById('confettiCanvas');
-const confettiCtx=confettiCanvas.getContext('2d');
-let confettiParticles=[];
-function resizeCanvas(){confettiCanvas.width=window.innerWidth; confettiCanvas.height=window.innerHeight;}
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-function createConfetti(count=150){
-  confettiParticles=[];
-  for(let i=0;i<count;i++){
-    confettiParticles.push({
-      x: Math.random()*window.innerWidth,
-      y: Math.random()*window.innerHeight-window.innerHeight,
-      r: Math.random()*6+4,
-      d: Math.random()*count,
-      color:`hsl(${Math.random()*360},100%,50%)`,
-      tilt:Math.random()*10-10,
-      tiltAngleIncrement: Math.random()*0.07+0.05,
-      tiltAngle:0
-    });
-  }
+if(data.status==="failed"||data.status==="cancelled"){
+evt.close();
+document.getElementById('payMsg').innerText="Payment failed or cancelled";
 }
-function drawConfetti(){
-  confettiCtx.clearRect(0,0,window.innerWidth,window.innerHeight);
-  confettiParticles.forEach(p=>{
-    confettiCtx.beginPath();
-    confettiCtx.lineWidth=p.r/2;
-    confettiCtx.strokeStyle=p.color;
-    confettiCtx.moveTo(p.x+p.tilt+p.r/4,p.y);
-    confettiCtx.lineTo(p.x+p.tilt,p.y+p.tilt+p.r/4);
-    confettiCtx.stroke();
-  });
-  updateConfetti();
+};
 }
-function updateConfetti(){
-  confettiParticles.forEach((p,i)=>{
-    p.tiltAngle+=p.tiltAngleIncrement;
-    p.y+=(Math.cos(p.d)+3+p.r/2)/2;
-    p.x+=Math.sin(p.d);
-    p.tilt=Math.sin(p.tiltAngle)*12;
-    if(p.y>window.innerHeight){
-      confettiParticles[i]={...p, y:-10};
-    }
-  });
+
+function startSession(seconds){
+document.getElementById('sessionModal').classList.remove('hidden');
+let remaining=seconds;
+clearInterval(countdownInterval);
+
+countdownInterval=setInterval(()=>{
+if(remaining<=0){
+clearInterval(countdownInterval);
+document.getElementById('sessionStatus').innerText="Expired";
+document.getElementById('statusDot').classList.remove('online');
+document.getElementById('statusDot').classList.add('offline');
+document.getElementById('countdown').innerText="00:00:00";
+return;
 }
-let confettiAnim;
-function startConfetti(){ confettiCanvas.classList.remove('hidden'); createConfetti(); confettiAnim=setInterval(drawConfetti,16); }
-function stopConfetti(){ clearInterval(confettiAnim); confettiCanvas.classList.add('hidden'); confettiCtx.clearRect(0,0,window.innerWidth,window.innerHeight); }
+let h=Math.floor(remaining/3600);
+let m=Math.floor((remaining%3600)/60);
+let s=remaining%60;
+
+document.getElementById('countdown').innerText=
+String(h).padStart(2,'0')+":"+
+String(m).padStart(2,'0')+":"+
+String(s).padStart(2,'0');
+remaining--;
+},1000);
+}
 </script>
-</body
+
+</body>
+</html>
