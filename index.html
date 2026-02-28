@@ -122,128 +122,165 @@ Pay & Connect
 </div>
 </div>
 
-<script>
+<script> 
 const BASE_URL="https://netsasa-backend-1.onrender.com";
 const PAY_API=BASE_URL+"/api/pay";
 
-const packages=[
-{ id:'p2', name:'Sawa 50', price:10, duration:'50 minutes', seconds:3000 },
-{ id:'p3', name:'Leo 1hr', price:20, duration:'1 hour', seconds:3600 },
-{ id:'pNEW', name:'Power 2hr 🔥', price:35, duration:'2 hours', seconds:7200 },
-{ id:'p4', name:'Kipindi 3hr', price:50, duration:'3 hours', seconds:10800 },
-{ id:'p5', name:'Siku 1 Day', price:100, duration:'24 hours', seconds:86400 },
-{ id:'p9', name:'Weekend 48hr', price:150, duration:'48 hours', seconds:172800 },
-{ id:'p10', name:'Wiki 7 Day', price:400, duration:'7 days', seconds:604800 }
+const packages = [
+  { id:'p1', name:'Mini 50', price:10, duration:'50 minutes', seconds:3000 },
+  { id:'p2', name:'Leo 1hr', price:25, duration:'1 hour', seconds:3600 },
+  { id:'p3', name:'Power 2hr 🔥', price:50, duration:'2 hours', seconds:7200 },
+  { id:'p4', name:'Kipindi 3hr', price:75, duration:'3 hours', seconds:10800 },
+  { id:'p5', name:'Siku 6hr', price:100, duration:'6 hours', seconds:21600 },
+  { id:'p6', name:'Half Day 12hr', price:150, duration:'12 hours', seconds:43200 },
+  { id:'p7', name:'Siku 1 Day', price:200, duration:'24 hours', seconds:86400 },
+  { id:'p8', name:'Weekend 2 Days', price:300, duration:'48 hours', seconds:172800 },
+  { id:'p9', name:'Weekend 3 Days', price:450, duration:'72 hours', seconds:259200 },
+  { id:'p10', name:'Mega 7 Days', price:600, duration:'7 days', seconds:604800 }
 ];
 
-let activePackage=null;
-let countdownInterval=null;
-const grid=document.getElementById('packagesGrid');
+let activePackage = null;
+let countdownInterval = null;
+let paymentCountdownInterval = null;
+const grid = document.getElementById('packagesGrid');
 
-packages.forEach(p=>{
-const card=document.createElement('article');
-card.className='rounded-2xl p-5 glass';
-card.innerHTML=`
-<h3 class="text-lg font-semibold">${p.name}</h3>
-<div class="text-2xl font-bold mt-2">KES ${p.price}</div>
-<div class="text-xs text-sky-300">${p.duration}</div>
-<button onclick="openPay('${p.id}')" 
-class="mt-4 w-full px-4 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-700">
-Pay & Connect</button>`;
-grid.appendChild(card);
+packages.forEach(p => {
+  const card = document.createElement('article');
+  card.className = 'rounded-2xl p-5 glass';
+  card.innerHTML = `
+    <h3 class="text-lg font-semibold">${p.name}</h3>
+    <div class="text-2xl font-bold mt-2">KES ${p.price}</div>
+    <div class="text-xs text-sky-300">${p.duration}</div>
+    <button onclick="openPay('${p.id}')" 
+    class="mt-4 w-full px-4 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-700">
+    Pay & Connect</button>`;
+  grid.appendChild(card);
 });
 
 function openPay(id){
-activePackage=packages.find(x=>x.id===id);
-document.getElementById('modalTitle').innerText=`Buy ${activePackage.name}`;
-document.getElementById('modalPrice').innerText=`KES ${activePackage.price}`;
-document.getElementById('payModal').classList.remove('hidden');
+  activePackage = packages.find(x => x.id === id);
+  document.getElementById('modalTitle').innerText = `Buy ${activePackage.name}`;
+  document.getElementById('modalPrice').innerText = `KES ${activePackage.price}`;
+  document.getElementById('payMsg').innerText = "";
+  document.getElementById('payModal').classList.remove('hidden');
+  clearInterval(paymentCountdownInterval);
+  document.getElementById('payMsg').innerText = "";
 }
 
 function closePay(){
-document.getElementById('payModal').classList.add('hidden');
-document.getElementById('payMsg').innerText="";
+  document.getElementById('payModal').classList.add('hidden');
+  document.getElementById('payMsg').innerText = "";
+  clearInterval(paymentCountdownInterval);
 }
 
 function normalizePhone(v){
-v=v.replace(/\D/g,'');
-if(v.startsWith('07')) return '254'+v.slice(1);
-if(v.startsWith('254')) return v;
-return null;
+  v = v.replace(/\D/g,'');
+  if(v.startsWith('07')) return '254'+v.slice(1);
+  if(v.startsWith('254')) return v;
+  return null;
 }
 
-document.getElementById('payBtn').addEventListener('click',async()=>{
-const phone=normalizePhone(document.getElementById('phone').value);
-if(!phone){document.getElementById('payMsg').innerText="Invalid phone number";return;}
+document.getElementById('payBtn').addEventListener('click', async () => {
+  const phone = normalizePhone(document.getElementById('phone').value);
+  if(!phone){
+    document.getElementById('payMsg').innerText = "Invalid phone number";
+    return;
+  }
 
-document.getElementById('payMsg').innerText="Processing payment...";
+  document.getElementById('payMsg').innerText = "Processing payment...";
 
-try{
-const res=await fetch(PAY_API,{
-method:'POST',
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify({ phone, package_id:activePackage.id })
+  try {
+    const res = await fetch(PAY_API, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ phone, package_id: activePackage.id })
+    });
+    const json = await res.json();
+
+    // Use CheckoutRequestID or fallback to transactionId
+    const checkoutId = json.CheckoutRequestID || json.checkout_id || json.transactionId;
+    if(!checkoutId){
+      document.getElementById('payMsg').innerText = "Payment failed to initiate";
+      return;
+    }
+
+    startPaymentCountdown(120); // start 2-minute STK countdown
+    listenSSE(checkoutId);
+
+  } catch(err){
+    console.error(err);
+    document.getElementById('payMsg').innerText = "Server error. Try again.";
+  }
 });
-const json=await res.json();
 
-if(!json.checkout_id){
-document.getElementById('payMsg').innerText="Payment failed";
-return;
+function startPaymentCountdown(seconds){
+  clearInterval(paymentCountdownInterval);
+  let remaining = seconds;
+  paymentCountdownInterval = setInterval(()=>{
+    if(remaining <= 0){
+      clearInterval(paymentCountdownInterval);
+      document.getElementById('payMsg').innerText = "Payment timed out. Please try again.";
+      return;
+    }
+    let m = Math.floor(remaining / 60);
+    let s = remaining % 60;
+    document.getElementById('payMsg').innerText = `Complete STK push on your phone (${m}:${s.toString().padStart(2,'0')})`;
+    remaining--;
+  }, 1000);
 }
 
-listenSSE(json.checkout_id);
+function listenSSE(checkoutId){
+  const evt = new EventSource(`${BASE_URL}/api/stream/${checkoutId}`);
 
-}catch{
-document.getElementById('payMsg').innerText="Server error";
-}
-});
+  evt.onmessage = e => {
+    const data = JSON.parse(e.data);
+    console.log("SSE event:", data);
 
-function listenSSE(id){
-const evt=new EventSource(BASE_URL+"/api/stream/"+id);
+    if(data.status === "success"){
+      evt.close();
+      closePay();
+      clearInterval(paymentCountdownInterval);
+      startSession(activePackage.seconds);
+    }
+    if(data.status === "failed" || data.status === "cancelled"){
+      evt.close();
+      clearInterval(paymentCountdownInterval);
+      document.getElementById('payMsg').innerText = "Payment failed or cancelled";
+    }
+    if(data.status === "pending"){
+      // keep countdown running
+    }
+  };
 
-evt.onmessage=(e)=>{
-const data=JSON.parse(e.data);
-
-if(data.status==="success"){
-evt.close();
-closePay();
-startSession(activePackage.seconds);
-}
-
-if(data.status==="failed"||data.status==="cancelled"){
-evt.close();
-document.getElementById('payMsg').innerText="Payment failed or cancelled";
-}
-};
+  evt.onerror = err => {
+    console.error("SSE error:", err);
+    document.getElementById('payMsg').innerText = "Connection lost. Refresh and try again";
+    evt.close();
+  };
 }
 
 function startSession(seconds){
-document.getElementById('sessionModal').classList.remove('hidden');
-let remaining=seconds;
-clearInterval(countdownInterval);
+  document.getElementById('sessionModal').classList.remove('hidden');
+  let remaining = seconds;
+  clearInterval(countdownInterval);
 
-countdownInterval=setInterval(()=>{
-if(remaining<=0){
-clearInterval(countdownInterval);
-document.getElementById('sessionStatus').innerText="Expired";
-document.getElementById('statusDot').classList.remove('online');
-document.getElementById('statusDot').classList.add('offline');
-document.getElementById('countdown').innerText="00:00:00";
-return;
+  countdownInterval = setInterval(()=>{
+    if(remaining <= 0){
+      clearInterval(countdownInterval);
+      document.getElementById('sessionStatus').innerText = "Expired";
+      document.getElementById('statusDot').classList.remove('online');
+      document.getElementById('statusDot').classList.add('offline');
+      document.getElementById('countdown').innerText = "00:00:00";
+      return;
+    }
+    let h = Math.floor(remaining/3600);
+    let m = Math.floor((remaining%3600)/60);
+    let s = remaining%60;
+
+    document.getElementById('countdown').innerText =
+      String(h).padStart(2,'0')+":"+
+      String(m).padStart(2,'0')+":"+
+      String(s).padStart(2,'0');
+    remaining--;
+  }, 1000);
 }
-let h=Math.floor(remaining/3600);
-let m=Math.floor((remaining%3600)/60);
-let s=remaining%60;
-
-document.getElementById('countdown').innerText=
-String(h).padStart(2,'0')+":"+
-String(m).padStart(2,'0')+":"+
-String(s).padStart(2,'0');
-remaining--;
-},1000);
-}
-</script>
-
-</body>
-</html>
-
