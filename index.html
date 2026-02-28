@@ -126,7 +126,7 @@ Pay & Connect
 const BASE_URL="https://netsasa-backend-1.onrender.com";
 const PAY_API=BASE_URL+"/api/pay";
 
-const packages = [
+const packages =[
 { id:'p1', name:'Mini 50', price:10, duration:'50 minutes', seconds:3000 },
 { id:'p2', name:'Leo 1hr', price:25, duration:'1 hour', seconds:3600 },
 { id:'p3', name:'Power 2hr 🔥', price:50, duration:'2 hours', seconds:7200 },
@@ -284,4 +284,5 @@ function startSession(seconds){
     remaining--;
   }, 1000);
 }
+
 
