@@ -127,16 +127,16 @@ const BASE_URL="https://netsasa-backend-1.onrender.com";
 const PAY_API=BASE_URL+"/api/pay";
 
 const packages = [
-  { id:'p1', name:'Mini 50', price:10, duration:'50 minutes', seconds:3000 },
-  { id:'p2', name:'Leo 1hr', price:25, duration:'1 hour', seconds:3600 },
-  { id:'p3', name:'Power 2hr 🔥', price:50, duration:'2 hours', seconds:7200 },
-  { id:'p4', name:'Kipindi 3hr', price:75, duration:'3 hours', seconds:10800 },
-  { id:'p5', name:'Siku 6hr', price:100, duration:'6 hours', seconds:21600 },
-  { id:'p6', name:'Half Day 12hr', price:150, duration:'12 hours', seconds:43200 },
-  { id:'p7', name:'Siku 1 Day', price:200, duration:'24 hours', seconds:86400 },
-  { id:'p8', name:'Weekend 2 Days', price:300, duration:'48 hours', seconds:172800 },
-  { id:'p9', name:'Weekend 3 Days', price:450, duration:'72 hours', seconds:259200 },
-  { id:'p10', name:'Mega 7 Days', price:600, duration:'7 days', seconds:604800 }
+{ id:'p1', name:'Mini 50', price:10, duration:'50 minutes', seconds:3000 },
+{ id:'p2', name:'Leo 1hr', price:25, duration:'1 hour', seconds:3600 },
+{ id:'p3', name:'Power 2hr 🔥', price:50, duration:'2 hours', seconds:7200 },
+{ id:'p4', name:'Kipindi 3hr', price:75, duration:'3 hours', seconds:10800 },
+{ id:'p5', name:'Siku 6hr', price:100, duration:'6 hours', seconds:21600 },
+{ id:'p6', name:'Half Day 12hr', price:150, duration:'12 hours', seconds:43200 },
+{ id:'p7', name:'Siku 1 Day', price:200, duration:'24 hours', seconds:86400 },
+{ id:'p8', name:'Weekend 2 Days', price:300, duration:'48 hours', seconds:172800 },
+{ id:'p9', name:'Weekend 3 Days', price:450, duration:'72 hours', seconds:259200 },
+{ id:'p10', name:'Mega 7 Days', price:600, duration:'7 days', seconds:604800 }
 ];
 
 let activePackage = null;
@@ -284,3 +284,4 @@ function startSession(seconds){
     remaining--;
   }, 1000);
 }
+
